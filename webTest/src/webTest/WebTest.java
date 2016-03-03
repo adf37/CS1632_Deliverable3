@@ -115,7 +115,7 @@ public class WebTest {
 		Thread.sleep(2000);
 		int n = 0;
 		for (String window : driver.getWindowHandles()){
-			if (n == 0){ //first window is our previous window
+			if (n == 0){ 
 				n++;
 				continue;
 			}
@@ -332,6 +332,31 @@ public class WebTest {
 		driver.quit();
 	}
 	
+	//Scenario 6:
+	//Given that I am not a redditor, when I try and submit a new link, then I should be told I must be logged in to submit a new link
+	@Test
+	public void submitNewLink() throws InterruptedException{
+		WebElement button = driver.findElement(By.linkText("Submit a new link"));
+		button.click();
+		Thread.sleep(2000);
+		WebElement msg = driver.findElement(By.id("cover-msg"));
+		assertTrue(msg.isDisplayed());
+		driver.quit();
+	}
+	
+	//Scenario 7:
+	//Given that I am not a redditor,
+	//when I try and sumbit a new text post,
+	//then I should be told that I must be logged in to sumbit a new text post
+	@Test
+	public void submitTextPost() throws InterruptedException{
+		WebElement button = driver.findElement(By.linkText("Submit a new text post"));
+		button.click();
+		Thread.sleep(2000);
+		WebElement msg = driver.findElement(By.id("cover-msg"));
+		assertTrue(msg.isDisplayed());
+		driver.quit();
+	}
 
 	//-------------------------------------------------------------------------------------------------------
 	//User Story: 
@@ -374,7 +399,6 @@ public class WebTest {
 		WebElement modmail = driver.findElement(By.id("modmail"));
 		modmail.click();
 		Thread.sleep(2500);
-		//WebElement tab = driver.findElement(By.xpath("//li[@class='selected']/a[@class='choice']"));
 		assertTrue(driver.findElement(By.xpath("//a[text()='moderator mail']")).isDisplayed());
 		driver.quit();
     }
