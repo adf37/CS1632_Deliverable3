@@ -3,6 +3,7 @@ package webTest;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Random;
 
 import org.junit.After;
 import org.junit.Before;
@@ -236,9 +237,9 @@ public class WebTest {
 		login.click();
 		Thread.sleep(2500);
 		WebElement profile = driver.findElement(By.linkText("adf37"));
-		pref.click();
-		WebElement linkKarma = driver.findElementByClassName("titlebox");
-		assertTrue(linkKarma.getText().indexOf("link karma" >= 0));
+		profile.click();
+		WebElement linkKarma = driver.findElement(By.className("titlebox"));
+		assertTrue(linkKarma.getText().indexOf("link karma") >= 0);
 		driver.quit();
     }
 
@@ -257,8 +258,11 @@ public class WebTest {
 		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
 		login.click();
 		Thread.sleep(2500);
+		WebElement mySubReddits = driver.findElement(By.xpath("//*[contains(@class, 'selected title')]"));
+		mySubReddits.click();
+		Thread.sleep(500);
 		WebElement llama = driver.findElement(By.xpath("//a[@href='https://www.reddit.com/r/llama/']"));
-		assertEquals("llama", llama.getText());
+		assertEquals("LLAMA", llama.getText());
 		driver.quit();
     }
 
@@ -394,7 +398,7 @@ public class WebTest {
 		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
 		login.click();
 		Thread.sleep(2500);
-		WebElement createButton = driver.findElement(By.xpath("//button[contains(text(), 'Create your own subreddit')]"))
+		WebElement createButton = driver.findElement(By.xpath("//button[contains(text(), 'Create your own subreddit')]"));
 		createButton.click();
 		Thread.sleep(2500);
 		WebElement nameField = driver.findElement(By.id("name"));
