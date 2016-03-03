@@ -441,6 +441,28 @@ public class WebTest {
     //Scenario 3: Given that I am logged in,
     //            When I log out and try to upvote a post,
     //            Then I will be prompted to log in.
+    @Test
+    public void loggedOutVote() throws InterruptedException{
+    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
+		link.click();
+		Thread.sleep(1000);
+		WebElement user = driver.findElement(By.id("user_login"));
+		user.sendKeys("adf37");
+		WebElement password = driver.findElement(By.id("passwd_login"));
+		password.sendKeys("password");
+		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
+		login.click();
+		Thread.sleep(2500);
+		WebElement logout = driver.findElement(By.linkText("logout"));
+		logout.click();
+		Thread.sleep(2500);
+		WebElement e = driver.findElement(By.linkText("Submit a new link"));
+		e.click();
+		Thread.sleep(1000);
+		WebElement loginRequired = driver.findElement(By.id("cover-msg"));
+		assertEquals("You need to be logged in to submit things.", loginRequired.getText());
+		driver.quit();
+    }
 
 
     //Just in case any windows are not closed, close them at the conclusion of the tests
