@@ -28,7 +28,9 @@ public class WebTest {
 	//Scenario 1: Given a correct username and a correct password,
 	//			  When I try to access my profile page and select the comments section,
 	//			  Then I should see the post with title "My University made a funny."			
-
+	//The test will log in to the user's profile with the correct username and password. The test will then click on the username's
+	//link to be navigated to the user's profile page. The comments section tab will be selected and checked for a known post that
+	//was commented on by the user. 
 	@Test
 	public void checkUserComments() throws InterruptedException {
 		redditLogin("adf37", "password");
@@ -46,6 +48,9 @@ public class WebTest {
 	//Scenario 2: Given a correct username and a correct password,
 		//			  When I try to access my profile page and select the upvoted section,
 		//			  Then I should see the post with title "I made a Victorian map of Mars!."
+	//The test will log in to the user's profile with the correct username and password. The test will then click on the username's
+		//link to be navigated to the user's profile page. The upvoted section tab will be selected and checked for a known post that
+		//was upvoted on by the user. 
 	@Test
 	public void checkUpVotes() throws InterruptedException{
 		redditLogin("adf37", "password");
@@ -64,6 +69,9 @@ public class WebTest {
 		//			  When I try to access my profile page and select the downvoted section,
 		//			  Then I should see the post with title "Since Fallout 4 doesn't have weapon condition, I decided to try
 		//			  and animate what it might look like."
+	//The test will log in to the user's profile with the correct username and password. The test will then click on the username's
+		//link to be navigated to the user's profile page. The downvoted section tab will be selected and checked for a known post that
+		//was downvoted on by the user. 
 		@Test
 	public void checkDownVotes() throws InterruptedException{
 		redditLogin("adf37", "password");
@@ -82,6 +90,11 @@ public class WebTest {
 		//			  When I try to edit my subscriptions and click the subscribe button next to /r/The_Donald: Donald J. Trump for President
 		//			  Then the after reloading the page, the new subscription should appear in the my subreddits dropdown menu.
 		//***this is assuming that the user has not subscribed to the subscription before this test***
+		//The test will log in to the user's account with the correct username and password. The test will then navigate to the my 
+		//subreddits dropdown menu and select edit subscriptions. In the search box on this page the text "Donald Trump" will be entered
+		//and the first link containing "The_Donald" will be selected resulting in a new page being opened. On this new window the subscribe button
+		//will be clicked and the window will close. The previous window will reload. A click of the my subreddits dropdown will then occur and
+		//a check that the new subscription will be performed.
 	@Test
 	public void subscribeToTrump() throws InterruptedException{
 		redditLogin("adf37", "password");
@@ -127,6 +140,9 @@ public class WebTest {
 	//Scenario 5: Given that I am logged in with the correct username and password, when I click on the preferences tab, then 
 	//I should be able to select/deselect from the list of preference options.
 	//***This test is assuming that the checkbox has not already been check by the user***
+	//The test will log in to the user's account with the correct username and password. The preferences tab will then be selected.
+	//Under this new page the checkbox "open links in a new window" will be checked and the preferences will be saved with the click
+	//of the "save options" button at the bottom of the page. A check will then be made to see if the checkbox has now been enabled. 
 	@Test
 	public void adjustPreferences() throws InterruptedException{
 		redditLogin("adf37", "password");
@@ -216,6 +232,8 @@ public class WebTest {
 	
 	//Scenario 1: Given that I am not a redditor, when I try to select a subreddit from the top bar, then I should be navigated 
 	//to that subreddit I selected
+	//The test will select from the top of the page the subreddit "Funny". A check will then be made to verify that the user has been
+	//navigated to the subreddit's page.
 	@Test
 	public void selectSubReddit() throws InterruptedException{
 		WebElement link = driver.findElement(By.xpath("//*[contains(@class, 'sr-list')]"));
@@ -231,8 +249,10 @@ public class WebTest {
 	
 	//Scenario 2: Given that I am not a redditor, when I select the subreddit "funny", then I should be able to see the 
 	//subreddit of the month.
+	//The test will select the subreddit "Funny" from the top of the page. A verification that a subreddit of the month is present will 
+	//then be checked.
 	@Test
-	public void selectPostSubReddit() throws InterruptedException{
+	public void subRedditOfTheMonth() throws InterruptedException{
 		WebElement link = driver.findElement(By.xpath("//*[contains(@class, 'sr-list')]"));
 		WebElement list = link.findElement(By.id("sr-bar"));
 		WebElement choice = list.findElement(By.linkText("FUNNY"));
@@ -253,6 +273,8 @@ public class WebTest {
 	
 	//Scenario 3: Given that I am not a redditor, when I enter text in the search bar, then I should be shown filtered 
 	//reddit posts based on my input
+	//The test will use the search box on the main page to enter the text "USA". The user should then be navigated to 
+	//a search results page. 
 	@Test
 	public void searchReddit() throws InterruptedException{
 		WebElement form = driver.findElement(By.id("search"));
@@ -267,6 +289,8 @@ public class WebTest {
 	
 	//Scenario 4: Given that I am not a redditor, when I switch the language of the page, then the page should be updated to the 
 	//language that I selected.
+	//The test will select the English link at the top right of the home page. The language will then be switched to Deutsch from the 
+	//dropdown list presented and submitted. A check will be made that the now previous link is Deutsch instead of English.
 	@Test
 	public void changeLanguage() throws InterruptedException{
 		WebElement link = driver.findElement(By.linkText("English"));
@@ -287,6 +311,9 @@ public class WebTest {
 	
 	//Scenario 5: Given that I am not a redditor, when I change the time filter under the controversial category of the main page,
 	//then the page should be updated to the new time frame that was selected.
+	//Under the controversial tab on the main home page there is an option to filter the posts based on a time frame. The test will 
+	//navigate to this page and change the timeline from the past 24 hours to the past hour. A verification will then be made that the
+	//text has changed to the past hour.
 	@Test
 	public void changeTimeFrame() throws InterruptedException{
 		WebElement category = driver.findElement(By.className("tabmenu"));
@@ -425,6 +452,7 @@ public class WebTest {
     	fail();
     	driver.quit();
     }
+
 
     //Just in case any windows are not closed, close them at the conclusion of the tests
 	@After
