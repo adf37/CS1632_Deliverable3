@@ -185,6 +185,68 @@ public class WebTest {
 		assertTrue(option.isEnabled());
 		driver.quit();
 	}
+
+	//Scenario 6: Given that I am logged in,
+    //            When I click the downvote button on a post,
+    //            Then post appears in my downvoted list
+    @Test
+    public void canDownvote() throws InterruptedException{
+    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
+		link.click();
+		Thread.sleep(1000);
+		WebElement user = driver.findElement(By.id("user_login"));
+		user.sendKeys("adf37");
+		WebElement password = driver.findElement(By.id("passwd_login"));
+		password.sendKeys("password");
+		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
+		login.click();
+		Thread.sleep(2500);
+		List<WebElement> frontPageList = driver.findElements(By.xpath("//"));
+    }
+
+    //Scenario 7: Given that I am logged in,
+    //            When I click on my profile
+    //            The I can see my link karma.
+    @Test
+    public void canSeeKarma() throws InterruptedException{
+    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
+		link.click();
+		Thread.sleep(1000);
+		WebElement user = driver.findElement(By.id("user_login"));
+		user.sendKeys("adf37");
+		WebElement password = driver.findElement(By.id("passwd_login"));
+		password.sendKeys("password");
+		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
+		login.click();
+		Thread.sleep(2500);
+		WebElement profile = driver.findElement(By.linkText("adf37"));
+		pref.click();
+		WebElement linkKarma = driver.findElementByClassName("titlebox");
+		assertTrue(linkKarma.getText().indexOf("link karma" >= 0));
+		driver.quit();
+    }
+
+    //Scenario 8: Given that I am logged in,
+    //            When I click on the "My Subreddits" button,
+    //            Then I can see the subreddit "llama".
+    @Test
+    public void canSeeSubreddits() throws InterruptedException{
+    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
+		link.click();
+		Thread.sleep(1000);
+		WebElement user = driver.findElement(By.id("user_login"));
+		user.sendKeys("adf37");
+		WebElement password = driver.findElement(By.id("passwd_login"));
+		password.sendKeys("password");
+		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
+		login.click();
+		Thread.sleep(2500);
+		WebElement llama = driver.findElement(By.xpath("//a[@href='https://www.reddit.com/r/llama/']"));
+		assertEquals("llama", llama.getText());
+		driver.quit();
+    }
+
+
 	
 	
 //-----------------------------------------------------------------------------------------------
@@ -285,7 +347,72 @@ public class WebTest {
 		driver.quit();
 	}
 	
-	//Just in case any windows are not closed, close them at the conclusion of the tests
+
+	//-------------------------------------------------------------------------------------------------------
+	//User Story: 
+	//As a moderator, I want to be able to create and manage a subreddit, so that I can become a powerful figure in the community.
+    
+    //Scenario 1: Given a valid username and password,
+    //            When I click the "Create your own subreddit" button, and fill out the form,
+    //            Then my awesome new subreddit is created.
+    @Test
+    public void createSubreddit() throws InterruptedException{
+    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
+		link.click();
+		Thread.sleep(1000);
+		WebElement user = driver.findElement(By.id("user_login"));
+		user.sendKeys("adf37");
+		WebElement password = driver.findElement(By.id("passwd_login"));
+		password.sendKeys("password");
+		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
+		login.click();
+		Thread.sleep(2500);
+		WebElement createButton = driver.findElement(By.xpath("//button[contains(text(), 'Create your own subreddit')]"))
+		createButton.click();
+		Thread.sleep(2500);
+		WebElement nameField = driver.findElement(By.id("name"));
+		Random rand = new Random(System.nanoTime());
+		nameField.sendKeys("MahTestSubreddit" + rand.nextInt(100000));
+		WebElement titleField = driver.findElement(By.id("title"));
+		titleField.sendKeys("This is a test. It is only a test.");
+		WebElement descriptionField = driver.findElement(By.xpath("//textarea[@name = 'public_description']"));
+		descriptionField.sendKeys("Listen, this is just for a class, ok?");
+		WebElement sidebarField = driver.findElement(By.xpath("//textarea[@name = 'description']"));
+		descriptionField.sendKeys("Listen, this is just for a class, ok?");
+		WebElement submitField = driver.findElement(By.xpath("//textarea[@name = 'submit_text']"));
+		descriptionField.sendKeys("Listen, this is just for a class, ok?");
+		WebElement submitButton = driver.findElement(By.xpath("//button[@name = 'create']"));
+		submitButton.click();
+		Thread.sleep(2500);
+		WebElement infoBar = driver.findElement(By.xpath("//div[@class='infobar']"));
+		assertEquals("your subreddit has been created", infoBar.getText());
+		driver.close();
+    }
+
+    //Scenario 2: Given a valid moderator username and password,
+    //            When I click the "delete comment" button,
+    //            Then that comment disappears from my subreddit.
+    
+
+
+	//-------------------------------------------------------------------------------------------------------
+	//User Story: 
+	//As a logged-out redditor, I don't want my activity on reddit to appear in my account, because I don't want people to know I'm a brony.
+
+    //Scenario 1: Given that I am logged in,
+    //            When I log out and visit a subreddit,
+    //            Then that subreddit should not appear in my history when I log back in.
+
+    //Scenario 2: Given that I am logged in,
+    //            When I log out and try to comment on a subreddit,
+    //            Then I will be prompted to log in.
+
+    //Scenario 3: Given that I am logged in,
+    //            When I log out and try to upvote a post,
+    //            Then I will be prompted to log in.
+
+
+    //Just in case any windows are not closed, close them at the conclusion of the tests
 	@After
 	public void cleanUp(){
 		driver.quit();
