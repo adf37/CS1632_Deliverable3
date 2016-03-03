@@ -3,6 +3,7 @@ package webTest;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Random;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,16 +31,7 @@ public class WebTest {
 
 	@Test
 	public void checkUserComments() throws InterruptedException {
-		WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(2500);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
+		redditLogin("adf37", "password");
 		WebElement profile = driver.findElement(By.linkText("adf37"));
 		profile.click();
 		Thread.sleep(500);
@@ -56,16 +48,7 @@ public class WebTest {
 		//			  Then I should see the post with title "I made a Victorian map of Mars!."
 	@Test
 	public void checkUpVotes() throws InterruptedException{
-		WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(2500);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
+		redditLogin("adf37", "password");
 		WebElement profile = driver.findElement(By.linkText("adf37"));
 		profile.click();
 		Thread.sleep(500);
@@ -83,16 +66,7 @@ public class WebTest {
 		//			  and animate what it might look like."
 		@Test
 	public void checkDownVotes() throws InterruptedException{
-		WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(2500);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
+		redditLogin("adf37", "password");
 		WebElement profile = driver.findElement(By.linkText("adf37"));
 		profile.click();
 		Thread.sleep(500);
@@ -110,16 +84,7 @@ public class WebTest {
 		//***this is assuming that the user has not subscribed to the subscription before this test***
 	@Test
 	public void subscribeToTrump() throws InterruptedException{
-		WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(1000);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
+		redditLogin("adf37", "password");
 		WebElement mySubReddits = driver.findElement(By.xpath("//*[contains(@class, 'selected title')]"));
 		mySubReddits.click();
 		Thread.sleep(500);
@@ -164,16 +129,7 @@ public class WebTest {
 	//***This test is assuming that the checkbox has not already been check by the user***
 	@Test
 	public void adjustPreferences() throws InterruptedException{
-		WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(1000);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
+		redditLogin("adf37", "password");
 		WebElement pref = driver.findElement(By.linkText("preferences"));
 		pref.click();
 		Thread.sleep(2500);
@@ -187,21 +143,34 @@ public class WebTest {
 	}
 
 	//Scenario 6: Given that I am logged in,
-    //            When I click the downvote button on a post,
+    //            When I click the upvote button on a post,
     //            Then post appears in my downvoted list
     @Test
-    public void canDownvote() throws InterruptedException{
-    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(1000);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
-		List<WebElement> frontPageList = driver.findElements(By.xpath("//"));
+    public void canUpvote() throws InterruptedException{
+    	redditLogin("adf37", "password");
+    	WebElement post = driver.findElement(By.xpath("//div[@class='content']/div[3]/div[@id='siteTable']/div[@data-rank='1']/div[@class='entry unvoted']/p[@class='title']/a[@class='title may-blank loggedin ']"));
+    	String postTitle = post.getText();
+    	WebElement downvote = driver.findElement(By.xpath("//div[@class='content']/div[3]/div[@id='siteTable']/div[@data-rank='1']/div[@class='midcol unvoted']/div[@aria-label='upvote']"));
+    	downvote.click();
+    	Thread.sleep(2500);
+    	WebElement profile = driver.findElement(By.linkText("adf37"));
+    	profile.click();
+    	Thread.sleep(2500);
+    	WebElement upvotes = driver.findElement(By.linkText("upvoted"));
+    	upvotes.click();
+    	Thread.sleep(2500);
+    	try
+    	{
+    		driver.findElement(By.linkText(postTitle));
+    	}
+    	catch (NoSuchElementException e)
+    	{
+    		fail();
+    		driver.quit();
+    		return;
+    	}
+    	assertTrue(true);
+    	driver.quit();
     }
 
     //Scenario 7: Given that I am logged in,
@@ -209,20 +178,12 @@ public class WebTest {
     //            The I can see my link karma.
     @Test
     public void canSeeKarma() throws InterruptedException{
-    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(1000);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
+    	redditLogin("adf37", "password");
 		WebElement profile = driver.findElement(By.linkText("adf37"));
-		pref.click();
-		WebElement linkKarma = driver.findElementByClassName("titlebox");
-		assertTrue(linkKarma.getText().indexOf("link karma" >= 0));
+		profile.click();
+		Thread.sleep(2500);
+		WebElement linkKarma = driver.findElement(By.className("titlebox"));
+		assertTrue(linkKarma.getText().indexOf("link karma") >= 0);
 		driver.quit();
     }
 
@@ -231,18 +192,15 @@ public class WebTest {
     //            Then I can see the subreddit "llama".
     @Test
     public void canSeeSubreddits() throws InterruptedException{
-    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(1000);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
-		WebElement llama = driver.findElement(By.xpath("//a[@href='https://www.reddit.com/r/llama/']"));
-		assertEquals("llama", llama.getText());
+    	redditLogin("adf37", "password");
+		try
+		{
+			driver.findElement(By.xpath("//a[@href='https://www.reddit.com/r/llama/']"));
+		}
+		catch (NoSuchElementException e)
+		{
+			fail();
+		}
 		driver.quit();
     }
 
@@ -357,42 +315,43 @@ public class WebTest {
     //            Then my awesome new subreddit is created.
     @Test
     public void createSubreddit() throws InterruptedException{
-    	WebElement link = driver.findElement(By.linkText("Log in or sign up"));
-		link.click();
-		Thread.sleep(1000);
-		WebElement user = driver.findElement(By.id("user_login"));
-		user.sendKeys("adf37");
-		WebElement password = driver.findElement(By.id("passwd_login"));
-		password.sendKeys("password");
-		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
-		login.click();
-		Thread.sleep(2500);
-		WebElement createButton = driver.findElement(By.xpath("//button[contains(text(), 'Create your own subreddit')]"))
+    	redditLogin("coinmac", "oldPassy");
+		WebElement createButton = driver.findElement(By.xpath("//div[@class='side']/div[5]/div[@class='sidebox create']/div[@class='morelink']/a[@data-event-action='createsubreddit']"));
 		createButton.click();
 		Thread.sleep(2500);
-		WebElement nameField = driver.findElement(By.id("name"));
+		WebElement nameField = driver.findElement(By.xpath("//div[@class='content']/*/div[@id='sr-form']/div[1]/div[@class='linefield-content']/input[@id='name']"));
 		Random rand = new Random(System.nanoTime());
 		nameField.sendKeys("MahTestSubreddit" + rand.nextInt(100000));
-		WebElement titleField = driver.findElement(By.id("title"));
+		WebElement titleField = driver.findElement(By.xpath("//div[@class='content']/*/div[@id='sr-form']/div[2]/div[@class='linefield-content']/input[@id='title']"));
 		titleField.sendKeys("This is a test. It is only a test.");
-		WebElement descriptionField = driver.findElement(By.xpath("//textarea[@name = 'public_description']"));
+		WebElement descriptionField = driver.findElement(By.xpath("//div[@class='content']/*/div[@id='sr-form']/div[3]/div[@class='linefield-content']/div[@class='usertext-edit md-container']/div[@class='md']/textarea"));
 		descriptionField.sendKeys("Listen, this is just for a class, ok?");
-		WebElement sidebarField = driver.findElement(By.xpath("//textarea[@name = 'description']"));
-		descriptionField.sendKeys("Listen, this is just for a class, ok?");
-		WebElement submitField = driver.findElement(By.xpath("//textarea[@name = 'submit_text']"));
-		descriptionField.sendKeys("Listen, this is just for a class, ok?");
-		WebElement submitButton = driver.findElement(By.xpath("//button[@name = 'create']"));
+		WebElement sidebarField = driver.findElement(By.xpath("//div[@class='content']/*/div[@id='sr-form']/div[4]/div[@class='linefield-content']/div[@class='usertext']/div[@class='usertext-edit md-container']/div[@class='md']/textarea"));
+		sidebarField.sendKeys("Listen, this is just for a class, ok?");
+		WebElement submitField = driver.findElement(By.xpath("//div[@class='content']/*/div[@id='sr-form']/div[5]/div[@class='linefield-content']/div[@class='usertext']/div[@class='usertext-edit md-container']/div[@class='md']/textarea"));
+		submitField.sendKeys("Listen, this is just for a class, ok?");
+		WebElement submitButton = driver.findElement(By.xpath("//div[@class='content']/*/div[@id='sr-form']/div[@class='save-button']/button"));
 		submitButton.click();
 		Thread.sleep(2500);
-		WebElement infoBar = driver.findElement(By.xpath("//div[@class='infobar']"));
+		WebElement infoBar = driver.findElement(By.xpath("//div[@class='content']/div[@class='infobar ']/div[@class='md']/p"));
 		assertEquals("your subreddit has been created", infoBar.getText());
-		driver.close();
+		driver.quit();
     }
 
-    //Scenario 2: Given a valid moderator username and password,
-    //            When I click the "delete comment" button,
-    //            Then that comment disappears from my subreddit.
-    
+    //Scenario 2: Given a valid moderator username and password and am on the manage subreddit page,
+    //            When I click "modmail" button,
+    //			  Then I can see my modmail messages.
+    @Test
+    public void viewModMail() throws InterruptedException{
+    	redditLogin("coinmac", "oldPassy");
+		WebElement modmail = driver.findElement(By.id("modmail"));
+		modmail.click();
+		Thread.sleep(2500);
+		//WebElement tab = driver.findElement(By.xpath("//li[@class='selected']/a[@class='choice']"));
+		assertTrue(driver.findElement(By.xpath("//a[text()='moderator mail']")).isDisplayed());
+		driver.quit();
+    }
+
 
 
 	//-------------------------------------------------------------------------------------------------------
@@ -400,21 +359,99 @@ public class WebTest {
 	//As a logged-out redditor, I don't want my activity on reddit to appear in my account, because I don't want people to know I'm a brony.
 
     //Scenario 1: Given that I am logged in,
-    //            When I log out and visit a subreddit,
-    //            Then that subreddit should not appear in my history when I log back in.
-
+    //            When I log out,
+    //            Then I should not see a the subreddit "llama" I subscribed to.
+    @Test
+    public void loggedOutSubreddit() throws InterruptedException{
+    	redditLogin("adf37", "password");
+		redditLogout();
+		try
+		{
+			driver.findElement(By.xpath("//a[@href='https://www.reddit.com/r/llama/']"));
+		}
+		catch (NoSuchElementException e)
+		{
+			assertTrue(true);
+			driver.quit();
+			return;
+		}
+		fail();
+		driver.quit();
+		
+    }
     //Scenario 2: Given that I am logged in,
     //            When I log out and try to comment on a subreddit,
     //            Then I will be prompted to log in.
-
+    @Test
+    public void loggedOutNoComment() throws InterruptedException{
+    	redditLogin("adf37", "password");
+		redditLogout();
+		WebElement comments = driver.findElement(By.xpath("//div[@class='content']/div[3]/div[@id='siteTable']/div[@data-rank='1']/div[@class='entry unvoted']/ul[@class='flat-list buttons']/li[@class='first']/a[@class='comments may-blank']"));
+    	comments.click();
+    	Thread.sleep(2500);
+    	try
+    	{
+    		driver.findElement(By.xpath("//div[@class='content']/div[@class='commentarea']/form[@class='usertext cloneable']"));
+    	}
+    	catch (NoSuchElementException e)
+    	{
+    		assertTrue(true);
+    		driver.quit();
+    		return;
+    	}
+    	fail();
+    	driver.quit();
+    }
     //Scenario 3: Given that I am logged in,
     //            When I log out and try to upvote a post,
     //            Then I will be prompted to log in.
-
+    @Test
+    public void loggedOutNoVoting() throws InterruptedException{
+    	redditLogin("adf37", "password");
+    	redditLogout();
+    	WebElement upvote = driver.findElement(By.xpath("//div[@class='content']/div[3]/div[@id='siteTable']/div[@data-rank='1']/div[@class='midcol unvoted']/div[@aria-label='upvote']"));
+    	upvote.click();
+    	Thread.sleep(2500);
+    	try
+    	{
+    		driver.findElement(By.xpath("//div[@aria-hidden='true']"));
+    	}
+    	catch (NoSuchElementException e)
+    	{
+    		assertTrue(true);
+    		driver.quit();
+    		return;
+    	}
+    	fail();
+    	driver.quit();
+    }
 
     //Just in case any windows are not closed, close them at the conclusion of the tests
 	@After
 	public void cleanUp(){
 		driver.quit();
+	}
+	
+	// Method that logs into reddit with the passed username and password
+	private void redditLogin(String username, String pwd) throws InterruptedException
+	{
+		WebElement link = driver.findElement(By.linkText("Log in or sign up"));
+		link.click();
+		Thread.sleep(1000);
+		WebElement user = driver.findElement(By.id("user_login"));
+		user.sendKeys(username);
+		WebElement password = driver.findElement(By.id("passwd_login"));
+		password.sendKeys(pwd);
+		WebElement login = driver.findElement(By.xpath("//button[contains(text(), 'log in')]"));
+		login.click();
+		Thread.sleep(2500);
+	}
+	
+	// Method that logs out of reddit
+	private void redditLogout() throws InterruptedException
+	{
+		WebElement logout = driver.findElement(By.linkText("logout"));
+		logout.click();
+		Thread.sleep(2500);
 	}
 }
