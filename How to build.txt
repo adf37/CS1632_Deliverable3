@@ -1,0 +1,6 @@
+How to build
+
+Open the file webTest/src/webTest.java in Eclipse within a project which has the JUnit
+and Selenium jar files on the build path. The webTest.java file contains the JUnit
+tests using the Selenium web plugin, and can be run as a regular JUnit test suite
+which will start Firefox instances to run the tests.
